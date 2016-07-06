@@ -1,10 +1,10 @@
-# Examples of PHP Code
-# Repository for Studying PHP Language
+# Code Listings for PHP Course
 ========  
   
 Links:  
   
-Literature etc: http://study.istamendil.info/  
+Literature etc: http://study.istamendil.info/ (LAMP tab)  
+Course Author: Alexander Ferenets (aka Istamendil), http://istamendil.info  
   
   
 Be aware! Code here is just examples for Programming classes. It is only for studying purposes.
