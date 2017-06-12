@@ -1,9 +1,17 @@
 <?php
 
+require_once './Util/Configuration.php';
+require_once './Util/Request.php';
+require_once './Util/HttpRequest.php';
+require_once './Util/CliRequest.php';
+require_once './Util/RequestBuilder.php';
 require_once './Repository/ColonFileCountryRepository.php';
+require_once './Repository/CountryRepositoryFactory.php';
 require_once './Repository/CommaFileCountryRepository.php';
 require_once './Repository/WebServiceCountryRepository.php';
 require_once './Printer/Printer.php';
+require_once './Printer/PrinterFactory.php';
+require_once './Printer/HtmlTableListPrinter.php';
 require_once './Printer/TableListPrinter.php';
 require_once './Printer/CommaSeparatedListPrinter.php';
 
@@ -14,30 +22,56 @@ require_once './Printer/CommaSeparatedListPrinter.php';
  */
 class Application
 {
+
   const ACTION_ALL = 'all';
   const ACTION_SEARCH = 'search';
-  
-  protected $argv = [];
-  
+
+  private static $_instance = NULL;
+  protected $config;
   protected $countryRepository;
   protected $printer;
+  protected $request;
 
-  public function __construct($argv, CountryRepository $countryRepository, Printer $printer)
+  private function __construct(Configuration $config, Printer $printer = NULL)
   {
-    $this->argv = $argv;
-    $this->countryRepository = $countryRepository;
-    $this->printer = $printer;
+    $this->config = $config;
+
+    $this->request = RequestBuilder::build();
+
+    if(!$printer) {
+      $this->printer = PrinterFactory::getPrinter($this->request);
+    } else {
+      $this->printer = $printer;
+    }
+
+    $this->countryRepository = CountryRepositoryFactory::getRepository(
+                    $this->config->getParameter('source')
+    );
+  }
+
+  private function __clone()
+  {
+    
+  }
+
+  public static function getInstance(Configuration $config, Printer $printer = NULL)
+  {
+    if(is_null(self::$_instance)) {
+      self::$_instance = new self($config, $printer);
+    }
+    return self::$_instance;
   }
 
   public function run()
   {
-    switch($this->argv[0]) {
+    switch($this->request->getParameter('action')) {
       case self::ACTION_ALL:
         $countries = $this->countryRepository->findAll();
         $this->printer->printList($countries);
         break;
       case self::ACTION_SEARCH:
-        $countries = $this->countryRepository->findByName($this->argv[1]);
+        echo 'Search by '.$this->request->getParameter('param')."\n";
+        $countries = $this->countryRepository->findByName($this->request->getParameter('param'));
         $this->printer->printList($countries);
         break;
       default:

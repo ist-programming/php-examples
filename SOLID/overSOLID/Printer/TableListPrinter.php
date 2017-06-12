@@ -47,9 +47,9 @@ class TableListPrinter implements Printer
       }
       else{
         $add = (self::COL_LENGTH - mb_strlen($cell))/2;
-        echo str_repeat(' ', floor($add));
+        echo str_repeat(" ", floor($add));
         echo $cell;
-        echo str_repeat(' ', ceil($add));
+        echo str_repeat(" ", ceil($add));
       }
       echo ' |';
     }
