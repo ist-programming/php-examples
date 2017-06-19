@@ -1,0 +1,18 @@
+{
+  "name": "alexander/composer",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Istamendil",
+      "email": "ist.kazan@gmail.com"
+    }
+  ],
+  "require": {
+    "monolog/monolog": "^1.23"
+  },
+  "autoload": {
+    "psr-4": {
+      "": "src/"
+    }
+  }
+}
