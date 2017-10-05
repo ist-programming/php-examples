@@ -9,6 +9,7 @@ class A
   public function __set($name, $value)
   {
     echo "Tried to set " . $name . ' = ' . $value . "\n";
+    $this->$name = '!! '.$value;
   }
 
   public function __get($name)
